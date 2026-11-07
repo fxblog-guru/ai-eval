@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Read(~/.claude/plugins/**)",
+      "Write",
+      "Bash(python3 .evals/scripts/shared/lint_evals.py*)",
+      "Bash(python3 evals/scripts/shared/lint_evals.py*)",
+      "Bash(python3 .evals/scripts/shared/runner.py*)",
+      "Bash(python3 evals/scripts/shared/runner.py*)",
+      "Bash(python3 .evals/scripts/shared/status.py*)",
+      "Bash(python3 evals/scripts/shared/status.py*)",
+      "Bash(python3 .evals/scripts/shared/build_state.py*)",
+      "Bash(python3 evals/scripts/shared/build_state.py*)",
+      "Bash(python3 .evals/scripts/shared/calibrate.py*)",
+      "Bash(python3 evals/scripts/shared/calibrate.py*)",
+      "Bash(python3 .evals/scripts/compare_bench.py*)",
+      "Bash(python3 evals/scripts/compare_bench.py*)",
+      "Bash(python3 .evals/scripts/shared/baseline.py history*)",
+      "Bash(python3 evals/scripts/shared/baseline.py history*)",
+      "Bash(python3 .evals/scripts/shared/learnings.py*)",
+      "Bash(python3 evals/scripts/shared/learnings.py*)",
+      "Bash(python3 -m pytest .evals*)",
+      "Bash(python3 -m pytest evals*)",
+      "Bash(bash tests/selfcheck.sh)",
+      "Bash(verdict gate*)",
+      "Bash(git log*)",
+      "Bash(git rev-parse*)",
+      "Bash(git -C * log*)",
+      "Bash(git -C * rev-parse*)",
+      "Bash(git -C * status --porcelain*)",
+      "Bash(git -C * diff --stat*)"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push * --force*)",
+      "Bash(git push * -f*)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~*)",
+      "Bash(rm -rf .)",
+      "Bash(rm -rf ./)",
+      "Bash(git reset --hard origin/*)",
+      "Bash(git reset --hard upstream/*)",
+      "Bash(git commit --no-verify*)",
+      "Bash(git push --no-verify*)",
+      "Bash(git commit * --no-verify*)",
+      "Bash(git push * --no-verify*)",
+      "Bash(cat *.env*)",
+      "Bash(printenv*)",
+      "Read(.env)",
+      "Read(**/.env)",
+      "Write(.env)",
+      "Write(**/.env)",
+      "Edit(.env)",
+      "Edit(**/.env)",
+      "Read(.env.local)",
+      "Read(**/.env.local)",
+      "Write(.env.local)",
+      "Write(**/.env.local)",
+      "Edit(.env.local)",
+      "Edit(**/.env.local)",
+      "Read(.env.dev)",
+      "Read(**/.env.dev)",
+      "Write(.env.dev)",
+      "Write(**/.env.dev)",
+      "Edit(.env.dev)",
+      "Edit(**/.env.dev)",
+      "Read(.env.staging)",
+      "Read(**/.env.staging)",
+      "Write(.env.staging)",
+      "Write(**/.env.staging)",
+      "Edit(.env.staging)",
+      "Edit(**/.env.staging)",
+      "Read(.env.prod)",
+      "Read(**/.env.prod)",
+      "Write(.env.prod)",
+      "Write(**/.env.prod)",
+      "Edit(.env.prod)",
+      "Edit(**/.env.prod)",
+      "Read(.env.production)",
+      "Read(**/.env.production)",
+      "Write(.env.production)",
+      "Write(**/.env.production)",
+      "Edit(.env.production)",
+      "Edit(**/.env.production)"
+    ],
+    "ask": [
+      "Bash(git push*)",
+      "Bash(verdict upload*)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "for r in \"${EVAL_ROOT:-.evals}\" .evals evals; do if [ -f \"$r/scripts/shared/build_state.py\" ]; then python3 \"$r/scripts/shared/build_state.py\" --root \"$r\" --quiet || python \"$r/scripts/shared/build_state.py\" --root \"$r\" --quiet; break; fi; done",
+            "timeout": 20
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "for r in \"${EVAL_ROOT:-.evals}\" .evals evals; do if [ -f \"$r/scripts/shared/status.py\" ]; then python3 \"$r/scripts/shared/status.py\" --root \"$r\" --brief 2>/dev/null || python \"$r/scripts/shared/status.py\" --root \"$r\" --brief 2>/dev/null; break; fi; done",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

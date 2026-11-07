@@ -1,0 +1,4 @@
+{"case_id": "EV-TASK-001", "input": {"message": "ok"}, "fm": ["FM-001"], "expect": {}, "origin": "synthetic"}
+{"case_id": "TASK-2", "input": {"message": "bad id format"}, "fm": ["FM-001"], "expect": {}, "origin": "synthetic"}
+{"case_id": "EV-TASK-003", "input": {"message": "missing expect"}, "fm": ["FM-001"], "origin": "synthetic"}
+{"case_id": "EV-TASK-004", "input": {"message": "what is the refund window for card payments please"}, "fm": ["FM-001"], "expect": {}, "origin": "synthetic"}

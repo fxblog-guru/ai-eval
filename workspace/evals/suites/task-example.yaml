@@ -1,0 +1,35 @@
+# Example suite — runs end to end against the stub adapter so the scaffold is verifiable on
+# day one. Copy it, point `adapter` at your system, and add gates once a judge is VALIDATED.
+#
+# Note there are NO gates here. That is deliberate: a suite gains a gate only after the
+# evaluators deciding it can be trusted (EVAL-CONTRACTS 5.4). An ungated suite reports numbers; a
+# gated one blocks releases, and that requires a validated judge.
+
+suite: task-example
+layer: L2
+project: example-system
+
+# The dataset is immutable once a run references it. Fixing one row is v2, never an edit.
+dataset: DS-example-v1
+
+# Pinned, always. An alias ending in "latest" can be repointed by the provider with no change
+# in this repo, which makes every historical comparison quietly wrong.
+model: claude-sonnet-5
+temperature: 0
+prompt_version: example-2026-09-16
+
+# providers/<name>.py:<function> — the only place that knows how to reach your system.
+adapter: providers.example:call
+
+# k repeats per case. L0/L5 use 1; L1/L2 default to 3; L3 to 5. FLAKY is a real outcome, so
+# repeats exist to measure it, not to retry past it.
+repeats: 3
+
+# Code assertions first, always. A judge line looks like: judge:JDG-grounded-v1
+evaluators:
+  - assert:no-invented-ids
+
+# gates:
+#   task_success_ci_lower: 0.80     # the LOWER BOUND of the 95% interval, never the point estimate
+#   regression_margin: 0.05         # no failure mode may drop more than this vs the baseline
+# baseline: BASE-2026-09-16-example

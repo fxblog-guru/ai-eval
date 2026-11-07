@@ -1,0 +1,12 @@
+# vsce keeps everything not listed here. Negations (!) are avoided on purpose: `!out/**`
+# re-includes everything under out/, compiled tests included.
+.vscode/**
+.vscodeignore
+src/**
+out/**/*.map
+out/test/**
+tsconfig.json
+node_modules/**
+package-lock.json
+media/make-icon.mjs
+*.vsix

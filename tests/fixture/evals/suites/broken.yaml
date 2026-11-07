@@ -1,0 +1,10 @@
+suite: broken
+layer: L2
+dataset: DS-broken-v1
+model: model-latest
+repeats: 3
+evaluators:
+  - judge:JDG-tone-v1
+gates:
+  task_success: 0.80
+prompt_path: prompts/system.md

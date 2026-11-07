@@ -1,0 +1,3 @@
+{"case_id": "EV-RAG-001", "input": {"query": "fine"}, "relevant": ["c-1"], "known_absent": false, "origin": "trace", "source": "TB-2026-09-10-001/trace_r1"}
+{"case_id": "EV-RAG-002", "input": {"query": "empty relevant, not marked absent"}, "relevant": [], "known_absent": false, "origin": "handwritten"}
+{"case_id": "EV-TASK-900", "input": {"query": "wrong id space for a retrieval set"}, "relevant": ["c-2"], "known_absent": false, "origin": "handwritten"}

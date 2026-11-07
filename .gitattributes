@@ -1,0 +1,8 @@
+# Normalize to LF in the repository. The shell self-check and the CI scripts run on Linux; a
+# CRLF shebang line makes them fail with an error that names the wrong thing entirely.
+* text=auto eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.jsonl text eol=lf

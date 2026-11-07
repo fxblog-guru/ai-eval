@@ -1,0 +1,216 @@
+{
+  "name": "vscode-eval",
+  "displayName": "Agentic AI Eval",
+  "description": "Live board for the agentic-fx-ai-eval pipeline: the seven-step eval ladder, the seven layers, each suite's latest verdict with its confidence interval, judge trust, failure modes, datasets and red-team probes — read from .evals/state.json (or evals/state.json in an older project).",
+  "version": "0.3.1",
+  "publisher": "agentic-fx",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/agentic-fx/ai-eval.git",
+    "directory": "editor/vscode-eval"
+  },
+  "homepage": "https://gitlab.com/agentic-fx/ai-eval/-/tree/main/editor/vscode-eval",
+  "bugs": {
+    "url": "https://gitlab.com/agentic-fx/ai-eval/-/issues"
+  },
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#3b0d19",
+    "theme": "dark"
+  },
+  "keywords": [
+    "llm",
+    "evaluation",
+    "evals",
+    "rag",
+    "agentic",
+    "claude",
+    "llm-as-judge"
+  ],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Visualization",
+    "Testing",
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/.evals/state.json",
+    "workspaceContains:**/.evals/suites/*.yaml",
+    "workspaceContains:**/evals/state.json",
+    "workspaceContains:**/evals/suites/*.yaml",
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "evalBoard",
+          "title": "Agentic AI Eval",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "evalBoard": [
+        {
+          "type": "webview",
+          "id": "evalBoard.overview",
+          "name": "Overview"
+        },
+        {
+          "id": "evalBoard.suites",
+          "name": "Suites"
+        },
+        {
+          "id": "evalBoard.evidence",
+          "name": "Evidence"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "evalBoard.openBoard",
+        "title": "Eval: Open Board",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "evalBoard.refresh",
+        "title": "Eval: Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "evalBoard.selectProject",
+        "title": "Eval: Select Project",
+        "icon": "$(folder-library)"
+      },
+      {
+        "command": "evalBoard.runSuite",
+        "title": "Eval: Run a Suite…",
+        "icon": "$(play)"
+      },
+      {
+        "command": "evalBoard.dryRunSuite",
+        "title": "Eval: Dry-run a Suite…",
+        "icon": "$(debug-alt)"
+      },
+      {
+        "command": "evalBoard.lint",
+        "title": "Eval: Lint the Eval Root…",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "evalBoard.bundleUpdate",
+        "title": "Eval: Bundle Update…",
+        "icon": "$(arrow-circle-up)"
+      },
+      {
+        "command": "evalBoard.openArtifact",
+        "title": "Eval: Open Artifact"
+      },
+      {
+        "command": "evalBoard.openAgents",
+        "title": "Eval: Open Agents",
+        "icon": "$(organization)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "evalBoard.openArtifact",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "evalBoard.selectProject",
+          "when": "(view == evalBoard.overview || view == evalBoard.suites) && evalBoard.multiProject",
+          "group": "navigation@0"
+        },
+        {
+          "command": "evalBoard.openBoard",
+          "when": "view == evalBoard.overview || view == evalBoard.suites",
+          "group": "navigation@1"
+        },
+        {
+          "command": "evalBoard.refresh",
+          "when": "view == evalBoard.overview || view == evalBoard.suites",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "evalBoard.dryRunSuite",
+          "when": "view == evalBoard.suites && viewItem == evalBoard.suite",
+          "group": "inline@0"
+        },
+        {
+          "command": "evalBoard.runSuite",
+          "when": "view == evalBoard.suites && viewItem == evalBoard.suite",
+          "group": "inline@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Agentic AI Eval",
+      "properties": {
+        "evalBoard.statePath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the derived state index, relative to the project folder. Empty (default): .evals/state.json when the project has a .evals/ root, else evals/state.json, the bundle's own order (EVAL-CONTRACTS §2). Set it only when EVAL-PROFILE `Eval root` names another folder."
+        },
+        "evalBoard.python": {
+          "type": "string",
+          "default": "",
+          "description": "The Python the confirmed terminal commands use. Empty: python3 (python on Windows)."
+        },
+        "evalBoard.backgroundRebuild": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Run the project's `build_state.py` in the background when a dataset, judge, suite, run, baseline, red-team case or report changes. Off by default: it rewrites `state.json`, as the bundle's Stop hook does. Turn it on when Claude Code runs outside the project folder, where that hook never fires. Uses `evalBoard.python`."
+        },
+        "evalBoard.backgroundRebuildSeconds": {
+          "type": "number",
+          "default": 120,
+          "minimum": 15,
+          "description": "Minimum seconds between two background rebuilds."
+        },
+        "evalBoard.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the eval phase and the latest suite verdicts in the status bar."
+        },
+        "evalBoard.accent": {
+          "type": "string",
+          "enum": [
+            "coral",
+            "violet",
+            "theme"
+          ],
+          "enumDescriptions": [
+            "Coral accent (default): tells this board apart from the teal STLC and lavender SDLC boards.",
+            "A violet accent.",
+            "Follow the editor theme accent."
+          ],
+          "default": "coral",
+          "description": "Accent colour of the board and the sidebar Overview."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "node --test out/test/*.test.js",
+    "icon": "node media/make-icon.mjs",
+    "package": "npx --yes @vscode/vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.5.0"
+  }
+}

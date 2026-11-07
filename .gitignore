@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+.verdict-run.json
+.pytest_cache/
+.ruff_cache/
+
+# Run output is evidence, but it is large and regenerable; keep it out of the bundle repo.
+# In a PROJECT repo, decide deliberately: runs/ carries the traces a failed gate is argued from.
+workspace/evals/runs/*/
+!workspace/evals/runs/.gitkeep
+
+# Derived read model (EVAL-CONTRACTS 15): a cache of the artifacts, never a record.
+workspace/evals/state.json
+
+# The activity log (docs/activity-format.md) records this machine, not the bundle.
+workspace/evals/logs/

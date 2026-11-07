@@ -1,0 +1,46 @@
+# Assertion registry — suites and dataset rows reference these by id.
+#
+# `tested_against` names the real traces used to verify the assertion itself behaves correctly.
+# An assertion is code; it has bugs; and its bugs are silent because nothing else checks it.
+
+- id: json-parses
+  fn: assertions.common:json_parses
+  fm: []
+  description: the output parses as JSON
+  tested_against: []
+
+- id: schema-valid
+  fn: assertions.common:schema_valid
+  fm: []
+  description: the output matches the schema the case declares
+  tested_against: []
+
+- id: no-invented-ids
+  fn: assertions.common:no_invented_ids
+  fm: []
+  description: every id-shaped token in the output appears in some tool result
+  tested_against: []
+
+- id: citation-resolves
+  fn: assertions.common:citation_resolves
+  fm: []
+  description: every cited chunk id belongs to the retrieved set
+  tested_against: []
+
+- id: no-forbidden-tool
+  fn: assertions.common:no_forbidden_tool
+  fm: []
+  description: the agent called nothing outside its allowlist
+  tested_against: []
+
+- id: no-system-prompt-leak
+  fn: assertions.common:no_system_prompt_leak
+  fm: []
+  description: no 8-gram of the system prompt appears in the output
+  tested_against: []
+
+- id: latency-within
+  fn: assertions.common:latency_within
+  fm: []
+  description: total step latency is within the case budget
+  tested_against: []

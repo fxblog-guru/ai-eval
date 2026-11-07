@@ -1,0 +1,32 @@
+# Example L1 retrieval suite. The retriever is measured ALONE -- no LLM, no judge, deterministic
+# given a fixed index. A retrieval regression is an ordinary code regression.
+#
+# Run this before the L2 groundedness suite. Recall@k is the ceiling on everything downstream: a
+# chunk that was never retrieved cannot be used, however good the prompt is.
+
+suite: rag-example
+layer: L1
+project: example-system
+
+dataset: DS-example-retrieval-v1
+
+# Pinned exactly. Changing an embedding model silently invalidates every historical retrieval
+# number -- the vectors mean something different -- and nothing about the metrics looks wrong.
+model: text-embedding-example-v2
+temperature: 0
+k: 10
+corpus_version: v7
+index_built: 2026-09-14
+
+adapter: providers.example:call
+
+# No repeats: nothing here is sampled.
+repeats: 1
+
+evaluators:
+  - assert:citation-resolves
+
+# gates:
+#   recall_at_k_ci_lower: 0.90
+#   mrr_ci_lower: 0.60
+#   ndcg_at_k_ci_lower: 0.70

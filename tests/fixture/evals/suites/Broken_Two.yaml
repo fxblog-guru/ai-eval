@@ -1,0 +1,10 @@
+suite: Broken_Two
+layer: L2
+dataset: DS-does-not-exist-v1
+model: claude-sonnet-5
+temperature: 0
+repeats: 3
+evaluators:
+  - judge:JDG-unvalidated-v1
+gates:
+  task_success_ci_lower: 0.80

@@ -1,0 +1,3 @@
+{"case_id": "EV-RAG-001", "input": {"query": "how long does a card refund take"}, "relevant": ["pol-refund-014"], "partial": ["pol-refund-002"], "known_absent": false, "origin": "trace", "source": "TB-2026-09-10-001/trace_8f2a1c"}
+{"case_id": "EV-RAG-002", "input": {"query": "my money hasnt come back yet its been ages"}, "relevant": ["pol-refund-014", "pol-refund-021"], "partial": [], "known_absent": false, "origin": "trace", "source": "TB-2026-09-10-001/trace_b31e09"}
+{"case_id": "EV-RAG-003", "input": {"query": "can I pay in instalments"}, "relevant": [], "partial": [], "known_absent": true, "origin": "handwritten"}

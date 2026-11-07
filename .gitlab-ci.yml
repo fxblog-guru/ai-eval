@@ -1,0 +1,38 @@
+# CI for the agentic-fx-ai-eval bundle itself — not for projects that install it. Those use
+# workspace/evals/ci/.
+#
+# Guards the contracts: the shipped linter must accept the reference seed and catch every
+# violation in tests/fixture; the statistics must be numerically correct; every agent, command
+# and skill must carry its frontmatter and resolve its references.
+image: python:3.12-slim
+
+stages: [check]
+
+selfcheck:
+  stage: check
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq bash grep gawk >/dev/null
+  script:
+    - bash tests/selfcheck.sh
+
+lint-fixture-is-still-broken:
+  stage: check
+  script:
+    # The fixture exists to be caught. If it ever lints clean, the linter has stopped working.
+    - >
+      if python3 workspace/evals/scripts/shared/lint_evals.py --root tests/fixture/evals >/dev/null 2>&1;
+      then echo "the broken fixture now lints clean — the linter has regressed"; exit 1;
+      else echo "fixture still caught"; fi
+
+# The VS Code board. Its tests build evals/state.json from the seed and the broken fixture with the
+# shipped builder, so a change to build_state.py the board does not understand fails here.
+editor:
+  stage: check
+  image: node:20-bookworm
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq python3 >/dev/null
+  script:
+    - cd editor/vscode-eval
+    - npm ci
+    - npm run compile
+    - PYTHON=python3 npm test

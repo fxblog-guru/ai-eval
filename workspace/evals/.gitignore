@@ -1,0 +1,10 @@
+# Secrets: copy .env.example to .env.<env> and never commit the copies.
+.env.*
+!.env.example
+# The derived read model (EVAL-CONTRACTS 15): rebuilt by the Stop hook, a cache and never a record.
+state.json
+.verdict-run.json
+__pycache__/
+logs/
+# Cached attempts (EVAL-CONTRACTS 8.5): reused only while every input in the key is unchanged.
+cache/

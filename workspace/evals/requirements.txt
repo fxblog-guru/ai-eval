@@ -1,0 +1,8 @@
+# The shipped layer -- stats, lint, ctrf, runner -- has NO dependencies, deliberately: the
+# contract checks must run in CI without an install step.
+#
+# Add what your adapter and evaluators need:
+# anthropic>=0.40
+# jsonschema>=4.0        # assertions.common:schema_valid
+# pyyaml>=6.0            # richer suite YAML than the built-in subset parser
+# ragas>=0.2             # L1 RAG metrics (phase 5)
